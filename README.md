@@ -1,32 +1,81 @@
 # Rook Commerce Agent
 
-Autonomous AI agent that discovers paid API endpoints on the x402 protocol, pays for them with real USDC micropayments on Base, and executes onchain actions through KeeperHub based on the intelligence received.
+> Autonomous AI agent that pays for API intelligence via x402 micropayments and executes onchain actions through KeeperHub MCP. Two real onchain transactions per run — not a demo, not a mockup.
 
-## Flow
+## The Problem
+
+AI agents can discover and reason about API data, but they hit a wall when they need to **pay** for it and **act** on it onchain. x402 solves the payment side. KeeperHub solves the execution side. Nothing connects them — until now.
+
+## How It Works
 
 ```
-[Agent reads llms.txt] → discovers 80 x402 endpoints
-    ↓
-[Agent calls /api/ai-analysis] → receives 402 payment challenge
-    ↓
-[CDP wallet signs EIP-3009 payment authorization] → $0.001 USDC on Base
-    ↓
-[Payment settles onchain] → 200 OK + market intelligence returned
-    ↓
-[Agent analyzes signal] → "bullish" detected from API response
-    ↓
-[Agent calls KeeperHub MCP execute_transfer] → onchain transaction executed
-    ↓
-[Tx hash confirmed on Base] → full audit trail printed
+┌─────────────────────────────────────────────────────────────────┐
+│                    ROOK COMMERCE AGENT                           │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. DISCOVER                                                     │
+│     Agent reads llms.txt → finds 80 x402 paid endpoints         │
+│         ↓                                                        │
+│  2. PAY                                                          │
+│     Agent calls /api/ai-analysis → receives 402 challenge       │
+│     CDP wallet signs EIP-3009 authorization → $0.001 USDC     │
+│     Payment settles on Base → 200 OK + intelligence returned   │
+│         ↓                                                        │
+│  3. ANALYZE                                                      │
+│     Agent parses response → detects "bullish" signal            │
+│     Decides action: execute onchain transfer via KeeperHub      │
+│         ↓                                                        │
+│  4. EXECUTE                                                      │
+│     Agent connects to KeeperHub MCP (initialize → handshake)   │
+│     Calls execute_transfer → KeeperHub signs + broadcasts      │
+│     Tx hash confirmed on Base → full audit trail printed       │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## Why This Matters
 
-This is not a demo with mock payments. Every run produces two real onchain transactions:
+Every run produces **two real onchain transactions**:
+
 1. **x402 payment** — real USDC settled on Base via EIP-3009
 2. **KeeperHub execution** — real onchain transfer via KeeperHub MCP
 
-Autonomous agents paying for API intelligence and acting on it onchain is the agent commerce stack.
+This is the agent commerce stack: agents that pay for their own intelligence and act on it onchain, autonomously.
+
+## KeeperHub Integration
+
+This agent uses KeeperHub as its onchain execution layer via the MCP server.
+
+**Connection**: HTTP JSON-RPC to `https://app.keeperhub.com/mcp`
+**Auth**: Bearer token (organization API key, `kh_` prefix)
+**Handshake**: `initialize` → capture `mcp-session-id` from response headers → `notifications/initialized` → tool calls
+
+**MCP tools used:**
+
+| Tool | Purpose |
+|---|---|
+| `list_integrations` | Discover the execution wallet address |
+| `execute_transfer` | Transfer USDC on Base (simulate first, then execute) |
+
+**Key parameters for `execute_transfer`:**
+- `chain_id`: `"8453"` (Base mainnet — string, not number)
+- `to_address`: recipient EVM address
+- `amount`: human-readable string (e.g. `"0.001"`)
+- `token_address`: ERC20 contract (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` for USDC on Base)
+- `simulate`: `true` for dry-run, omit for real execution
+
+**Confirmed transactions:**
+- x402 payment: https://basescan.org/tx/0xe57f58ba4a953ee3edea7fd2acfbfcee307ca29ce329ceed3ac6ebef146f3bcd
+- KeeperHub execution: https://basescan.org/tx/0x50e379e71811bdec8239d535ae715725617e8dc9db000ae5e7271449074bf4d5
+
+## Tech Stack
+
+- **Node.js 22** — runtime
+- **@coinbase/cdp-sdk** — wallet management + EIP-3009 payment signing
+- **@x402/fetch** — x402 payment-aware HTTP client
+- **KeeperHub MCP** — onchain execution via Model Context Protocol
+- **dotenv** — environment management
+- **ethers** — utility (address validation, encoding)
 
 ## Prerequisites
 
@@ -96,28 +145,18 @@ node rook-commerce-agent.js --endpoint /api/translate
       Protocol:  KeeperHub MCP
       Signal:    BULLISH
       Tx:        https://basescan.org/tx/0x50e379e7...
-    Agent Wallet: 0xF3082fAf...
     ═══════════════════════════════════════
 
 ✅ Rook Commerce Agent — flow complete.
 ```
 
-## Architecture
+## Onboarding Deliverables
 
-- **x402 Protocol**: HTTP 402-based micropayment standard. Server returns payment challenge, client pays onchain, server verifies and returns data.
-- **CDP (Coinbase Developer Platform)**: Manages the payment wallet, signs EIP-3009 authorizations, settles via facilitator.
-- **KeeperHub MCP**: Model Context Protocol server that executes onchain transactions through managed wallets. 35 tools including execute_transfer, execute_contract_call, execute_check_and_execute.
-- **llms.txt**: Machine-readable endpoint catalog at `/llms.txt` — agents discover available paid APIs.
+This repo also includes deliverables for the **Best Onboarding UX Improvement** bounty:
 
-## KeeperHub Integration
-
-The agent connects to KeeperHub's MCP server via HTTP, completes the initialize → initialized handshake, then calls `execute_transfer` with:
-- `chain_id`: "8453" (Base mainnet)
-- `to_address`: recipient wallet
-- `amount`: transfer amount in human-readable units
-- `token_address`: ERC20 contract (USDC on Base)
-
-KeeperHub signs and broadcasts the transaction from its managed wallet, returning the tx hash.
+- **[STARTER_TEMPLATE.md](./STARTER_TEMPLATE.md)** — Zero to first transaction in 15 minutes, beginner-friendly
+- **[TUTORIAL.md](./TUTORIAL.md)** — Full step-by-step walkthrough with troubleshooting
+- **[ONBOARDING_TEARDOWN.md](./ONBOARDING_TEARDOWN.md)** — Every friction point hit during the build, with proposed fixes
 
 ## License
 
