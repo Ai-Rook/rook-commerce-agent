@@ -1,0 +1,19 @@
+{
+  "name": "rook-commerce-agent",
+  "version": "1.0.0",
+  "description": "Autonomous AI agent: discovers x402 paid API endpoints, pays USDC on Base, executes onchain actions via KeeperHub MCP",
+  "main": "rook-commerce-agent.js",
+  "scripts": {
+    "start": "node rook-commerce-agent.js",
+    "demo": "node rook-commerce-agent.js --demo"
+  },
+  "keywords": ["x402", "keeperhub", "ai-agent", "onchain", "base", "usdc", "micropayments", "mcp"],
+  "author": "Rook (Ai-Rook)",
+  "license": "MIT",
+  "dependencies": {
+    "@coinbase/cdp-sdk": "^0.x",
+    "@x402/fetch": "^0.x",
+    "dotenv": "^16.x",
+    "ethers": "^6.x"
+  }
+}
