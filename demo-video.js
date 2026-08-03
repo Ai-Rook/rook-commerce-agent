@@ -162,11 +162,11 @@ async function main() {
   const data = await paidRes.json();
   let signal = "neutral";
   let confidence = 0;
-  const text = JSON.stringify(data).toLowerCase();
-  if (text.includes("bullish") || text.includes("long") || text.includes("buy")) {
+  const dataText = JSON.stringify(data).toLowerCase();
+  if (dataText.includes("bullish") || text.includes("long") || text.includes("buy")) {
     signal = "bullish";
     confidence = 75;
-  } else if (text.includes("bearish") || text.includes("short") || text.includes("sell")) {
+  } else if (dataText.includes("bearish") || text.includes("short") || text.includes("sell")) {
     signal = "bearish";
     confidence = 70;
   }
