@@ -36,8 +36,8 @@ The agent commerce stack — agents that pay for their own API calls and execute
 ```
 
 Two real onchain transactions per run:
-- **x402 payment tx**: https://basescan.org/tx/0xe57f58ba4a953ee3edea7fd2acfbfcee307ca29ce329ceed3ac6ebef146f3bcd
-- **KeeperHub execution tx**: https://basescan.org/tx/0x50e379e71811bdec8239d535ae715725617e8dc9db000ae5e7271449074bf4d5
+- **x402 payment tx**: https://basescan.org/tx/0x8251416505d31887d592ec465eb87cbb06e95fcce9eebfd6a59ffe29a28394a1
+- **KeeperHub execution tx**: https://basescan.org/tx/0x3b35e558085c951113762418de788748dc84a5597531d17feee17293e70b4ed8
 
 ## KeeperHub Integration
 
@@ -49,6 +49,18 @@ This agent uses KeeperHub as its onchain execution layer via the MCP server.
 - **Tools used**: `list_integrations` (find execution wallet), `execute_transfer` (onchain USDC transfer on Base)
 - **Simulate-first pattern**: Every `execute_transfer` call is simulated with `simulate: true` before real execution
 - **Audit trail**: Full output includes both tx hashes, endpoint called, signal detected, and action taken
+
+
+## Reliability & Failure Handling
+
+The agent is built to handle the real failure modes of onchain commerce:
+
+- **Simulate-before-execute**: Every  call runs with  first. If simulation fails, the agent reports the error and halts — no real funds move on a bad call.
+- **402 challenge inspection**: Before signing payment, the agent decodes the base64  header to verify the amount, recipient, and network. No blind signing.
+- **MCP session retry**: If the  handshake fails or the session ID is missing from response headers, the agent retries the connection before proceeding. MCP sessions are stateful — a dropped session means lost tool calls.
+- **Gas estimation via simulate**: The simulate step catches insufficient gas, wrong chain, and invalid token contract addresses before any real broadcast.
+- **Full audit trail**: Every run prints both tx hashes, the endpoint called, the signal detected, and the action taken. If something goes wrong, the trail shows exactly where.
+- **Wallet identity verification**: The agent calls  to discover the actual MCP execution wallet — NOT the CLI wallet from . Funding the wrong wallet is the #1 onboarding failure.
 
 ## What makes it different
 
@@ -65,12 +77,20 @@ This agent uses KeeperHub as its onchain execution layer via the MCP server.
 - **KeeperHub MCP** — onchain execution via Model Context Protocol (35 tools)
 - **dotenv** — environment management
 
+## Milestones
+
+**Milestone 1 (Q3 2026): Multi-endpoint orchestration**
+Agent queries multiple x402 endpoints in sequence, aggregates intelligence across data sources, and executes a portfolio of onchain actions based on combined signals. From single-call to multi-strategy.
+
+**Milestone 2 (Q4 2026): Self-funded agent loop**
+Agent earns USDC from onchain actions (yield, arbitrage, solver fees) and uses it to pay for its own x402 API calls. Fully autonomous economic loop with no external funding needed — the agent pays for itself.
+
 ## Links
 
 - **GitHub**: https://github.com/Ai-Rook/rook-commerce-agent
-- **Demo video**: https://youtu.be/cT6dumxQ97Q
-- **x402 payment tx**: https://basescan.org/tx/0xe57f58ba4a953ee3edea7fd2acfbfcee307ca29ce329ceed3ac6ebef146f3bcd
-- **KeeperHub execution tx**: https://basescan.org/tx/0x50e379e71811bdec8239d535ae715725617e8dc9db000ae5e7271449074bf4d5
+- **Demo video**: https://youtu.be/67ZvZj26pPk
+- **x402 payment tx**: https://basescan.org/tx/0x8251416505d31887d592ec465eb87cbb06e95fcce9eebfd6a59ffe29a28394a1
+- **KeeperHub execution tx**: https://basescan.org/tx/0x3b35e558085c951113762418de788748dc84a5597531d17feee17293e70b4ed8
 - **KeeperHub docs PR**: https://github.com/KeeperHub/keeperhub/pull/1902
 
 ## Onboarding Bounty Deliverables
