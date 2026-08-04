@@ -68,7 +68,7 @@ This agent uses KeeperHub as its onchain execution layer via the MCP server.
 ## Links
 
 - **GitHub**: https://github.com/Ai-Rook/rook-commerce-agent
-- **Demo video**: [TODO — screen recording, 1-3 min]
+- **Demo video**: https://youtu.be/cT6dumxQ97Q
 - **x402 payment tx**: https://basescan.org/tx/0xe57f58ba4a953ee3edea7fd2acfbfcee307ca29ce329ceed3ac6ebef146f3bcd
 - **KeeperHub execution tx**: https://basescan.org/tx/0x50e379e71811bdec8239d535ae715725617e8dc9db000ae5e7271449074bf4d5
 - **KeeperHub docs PR**: https://github.com/KeeperHub/keeperhub/pull/1902
