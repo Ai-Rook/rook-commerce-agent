@@ -15,8 +15,8 @@
    - Size window to left half of screen
 
 2. **Chrome** (right side of screen):
-   - Tab 1: https://basescan.org/tx/0xe57f58ba4a953ee3edea7fd2acfbfcee307ca29ce329ceed3ac6ebef146f3bcd
-   - Tab 2: https://basescan.org/tx/0x50e379e71811bdec8239d535ae715725617e8dc9db000ae5e7271449074bf4d5
+   - Tab 1: https://basescan.org/tx/0x8251416505d31887d592ec465eb87cbb06e95fcce9eebfd6a59ffe29a28394a1
+   - Tab 2: https://basescan.org/tx/0x3b35e558085c951113762418de788748dc84a5597531d17feee17293e70b4ed8
    - Size window to right half of screen
    - Leave on Tab 1 (x402 payment tx)
 

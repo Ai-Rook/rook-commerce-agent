@@ -220,8 +220,8 @@ The **Rook Commerce Agent** is an autonomous AI agent that:
 Two real onchain transactions per run. Not a demo. Not a mockup.
 
 **Confirmed transactions:**
-- x402 payment: https://basescan.org/tx/0xe57f58ba4a953ee3edea7fd2acfbfcee307ca29ce329ceed3ac6ebef146f3bcd
-- KeeperHub execution: https://basescan.org/tx/0x50e379e71811bdec8239d535ae715725617e8dc9db000ae5e7271449074bf4d5
+- x402 payment: https://basescan.org/tx/0x8251416505d31887d592ec465eb87cbb06e95fcce9eebfd6a59ffe29a28394a1
+- KeeperHub execution: https://basescan.org/tx/0x3b35e558085c951113762418de788748dc84a5597531d17feee17293e70b4ed8
 
 ---
 
