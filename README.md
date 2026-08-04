@@ -127,24 +127,24 @@ node rook-commerce-agent.js --endpoint /api/translate
     → Signing payment via CDP wallet...
     ← HTTP 200
     ✅ Payment settled on Base
-    Tx: https://basescan.org/tx/0xe57f58ba...
+    Tx: https://basescan.org/tx/0x8251416505d31887d592ec465eb87cbb06e95fcce9eebfd6a59ffe29a28394a1
 [3] Analyzing intelligence...
     Signal: bullish (confidence: 75%)
     → Action: execute_transfer
 [4] Connecting to KeeperHub MCP...
     → Calling execute_transfer...
     ✅ Onchain execution completed
-    Tx: https://basescan.org/tx/0x50e379e7...
+    Tx: https://basescan.org/tx/0x3b35e558085c951113762418de788748dc84a5597531d17feee17293e70b4ed8
 [5] Full Audit Trail
     ═══════════════════════════════════════
     x402 Payment:
       Endpoint:  /api/ai-analysis
       Network:   Base (eip155:8453)
-      Tx:        https://basescan.org/tx/0xe57f58ba...
+      Tx:        https://basescan.org/tx/0x8251416505d31887d592ec465eb87cbb06e95fcce9eebfd6a59ffe29a28394a1
     Onchain Action:
       Protocol:  KeeperHub MCP
       Signal:    BULLISH
-      Tx:        https://basescan.org/tx/0x50e379e7...
+      Tx:        https://basescan.org/tx/0x3b35e558085c951113762418de788748dc84a5597531d17feee17293e70b4ed8
     ═══════════════════════════════════════
 
 ✅ Rook Commerce Agent — flow complete.
